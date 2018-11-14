@@ -5,6 +5,7 @@ import cv2
 import socket
 from time import sleep      
 import threading as td
+import subprocess
 
 true = True
 
@@ -89,8 +90,10 @@ def Assetplay():
         name = os.listdir()
         for image in name:
             if 'image' in magic.from_file(image):  # to check type of file 'I'/'V'
-                subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+image,shell=True)
+                subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+image+" &",shell=True)
+                subprocess.Popen("export pid=$!",shell=True)
                 sleep(15)
+                subprocess.Popen("kill $pid",shell=True)                
             else:
                 subprocess.Popen('omxplayer ' + image,shell=True)
         if internet():
@@ -101,14 +104,14 @@ def Assetplay():
         path = "/home/pi/innosignage/default"
         os.chdir(path)
         for i in fixedfiles:
-            subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+image[0],shell=True)
-            sleep(15)
+            subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+i" &"shell=True)
+            subprocess.Popen("export pid=$!",shell=True)
+            sleep(15) 
+            subprocess.Popen("kill $pid",shell=True)
         if internet():
             displayers()
         else:
             Assetplay()
-
-import subprocess
 
 def displayer():
     path = "/home/pi/innosignage/media"
@@ -127,8 +130,10 @@ def displayer():
                         Assetplay()
                     for image in l_duration:
                         if 'image' in magic.from_file(image[0]):  # to check type of file 'I'/'V'
-                            subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+image[0],shell=True)
+                            subprocess.Popen("feh -q -p -Z -F -R 60 -Y "+image[0]+" &",shell=True)
+                            subprocess.Popen("export pid=$!",shell=True)
                             sleep(image[1])
+                            subprocess.Popen("kill $pid",shell=True)
                         else:
                             subprocess.Popen('omxplayer ' + image[0])
                 else:
